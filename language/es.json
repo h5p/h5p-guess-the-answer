@@ -2,7 +2,7 @@
   "semantics": [
     {
       "label": "Descripción del trabajo",
-      "description": "Describe como el usuario debería resolver el trabajo."
+      "description": "Describe como el usuario debería resolver la tarea."
     },
     {
       "label": "Medio",
