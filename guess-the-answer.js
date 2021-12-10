@@ -112,7 +112,9 @@ H5P.GuessTheAnswer = (function () {
     buttonElement.addEventListener('click', function() {
       buttonElement.classList.add('hidden');
       solutionElement.classList.remove('hidden');
-      solutionElement.focus();
+      setTimeout(() => {
+        solutionElement.innerHTML = params.solutionText;
+      }, 0)
     });
   }
 
@@ -130,7 +132,7 @@ H5P.GuessTheAnswer = (function () {
       '<div class="media"></div>' +
       '<button class="show-solution-button">' + params.solutionLabel + '</button>' +
       '<span class="empty-text-for-nvda">&nbsp;</span>' +
-      '<div class="solution-text hidden" tabindex="-1">' + params.solutionText + '</div>';
+      '<div class="solution-text hidden" aria-live="polite"></div>';
 
     return element;
   };
