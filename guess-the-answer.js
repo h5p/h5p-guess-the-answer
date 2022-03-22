@@ -88,6 +88,7 @@ H5P.GuessTheAnswer = (function () {
    * @param {number} contentId
    */
   function C(params, contentId) {
+    const self = this;
     // Set default behavior.
     setDefaults(params, {
       taskDescription: '',
@@ -114,6 +115,7 @@ H5P.GuessTheAnswer = (function () {
       solutionElement.classList.remove('hidden');
       setTimeout(() => {
         solutionElement.innerHTML = params.solutionText;
+        self.trigger('resize');
       }, 0)
     });
   }
