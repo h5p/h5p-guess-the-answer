@@ -1,7 +1,7 @@
 {
   "semantics": [
     {
-      "label": "Descrición da tarefa",
+      "label": "Task description",
       "description": "Describe como debería resolver a tarefa o usuario."
     },
     {
