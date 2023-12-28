@@ -14,7 +14,7 @@
       ]
     },
     {
-      "label": "Descriptive solution label",
+      "label": "Apibūdinanti sprendimo etiketė",
       "default": "Spustelėkite, kad pamatytumėte atsakymą.",
       "description": "Spustelėjama teksto sritis, kurioje bus rodomas sprendimas."
     },
