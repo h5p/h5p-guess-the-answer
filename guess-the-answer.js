@@ -103,7 +103,7 @@ H5P.GuessTheAnswer = (function () {
     var solutionElement = rootElement.querySelector('.solution-text');
 
     // add media
-    if (params.media) {
+    if (params.media && Object.keys(params.media?.params).length > 0) {
       var el = createMediaElement(params.media, contentId, this);
       initImage(el.querySelector('img'), this);
       mediaElement.appendChild(el);
