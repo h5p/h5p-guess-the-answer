@@ -57,7 +57,21 @@
     "importance": "high",
     "name": "solutionText",
     "type": "text",
-    "widget": "textarea",
-    "description": "The solution for the picture."
+    "widget": "html",
+    "description": "The solution for the picture.",
+    "enterMode": "p",
+    "tags": [
+      "strong",
+      "em",
+      "u",
+      "a",
+      "ul",
+      "ol",
+      "h2",
+      "h3",
+      "hr",
+      "pre",
+      "code"
+    ]
   }
 ]
