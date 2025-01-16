@@ -129,7 +129,8 @@ H5P.GuessTheAnswer = (function () {
   C.prototype.createRootElement = function (params) {
     var element = document.createElement('div');
 
-    element.classList.add('h5p-guess-answer h5p-theme');
+    element.classList.add('h5p-guess-answer');
+    element.classList.add('h5p-theme');
     element.innerHTML = '<div class="h5p-guess-answer-title">' + params.taskDescription +'</div>' +
       '<div class="media"></div>' +
       '<button class="show-solution-button">' + params.solutionLabel + '</button>' +
