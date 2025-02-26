@@ -131,11 +131,12 @@ H5P.GuessTheAnswer = (function () {
 
     element.classList.add('h5p-guess-answer');
     element.classList.add('h5p-theme');
-    element.innerHTML = '<div class="h5p-guess-answer-title">' + params.taskDescription +'</div>' +
+    element.innerHTML = '<div class="h5p-guess-answer-title h5p-question-introduction">' + params.taskDescription +'</div>' +
       '<div class="media"></div>' +
-      '<button class="show-solution-button">' + params.solutionLabel + '</button>' +
+      '<div class="button-container">' +
+      '<button class="show-solution-button  h5p-theme-primary-cta h5p-theme-reveal-answer ">' + params.solutionLabel + '</button>' +
       '<span class="empty-text-for-nvda">&nbsp;</span>' +
-      '<div class="solution-text hidden" aria-live="polite"></div>';
+      '<div class="solution-text h5p-question-feedback-content-text hidden" aria-live="polite"></div></div>';
 
     return element;
   };
