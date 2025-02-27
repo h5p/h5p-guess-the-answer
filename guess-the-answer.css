@@ -21,11 +21,14 @@
   background: var(--h5p-theme-main-cta-dark);
 }
 
-.h5p-guess-answer-title p{
+.h5p-guess-answer-title p {
   display: inline-flex;
+  font-size: var(--h5p-theme-font-size-xl);
+  color: var(--h5p-theme-text-primary);
+  font-weight: 600;
 }
 
-.h5p-guess-answer .button-container{
+.h5p-guess-answer .button-container {
   margin: var(--h5p-theme-spacing-s);
   display: inline-flex;
 }
@@ -37,12 +40,14 @@
 .h5p-guess-answer .solution-text:focus {
   outline: none;
 }
+
 .h5p-guess-answer .empty-text-for-nvda {
   position: absolute;
   width: 1px;
   height: 1px;
   overflow: hidden;
 }
+
 .h5p-guess-answer .hidden {
   display: none;
 }
