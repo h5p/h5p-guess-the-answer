@@ -127,14 +127,35 @@ H5P.GuessTheAnswer = (function () {
    * @return {Element}
    */
   C.prototype.createRootElement = function (params) {
-    var element = document.createElement('div');
+    const element = document.createElement('div');
 
     element.classList.add('h5p-guess-answer');
-    element.innerHTML = '<div class="h5p-guess-answer-title">' + params.taskDescription +'</div>' +
-      '<div class="media"></div>' +
-      '<button class="show-solution-button">' + params.solutionLabel + '</button>' +
-      '<span class="empty-text-for-nvda">&nbsp;</span>' +
-      '<div class="solution-text hidden" aria-live="polite"></div>';
+    element.classList.add('h5p-theme');
+    const solutionButton = H5P.Components.Button({
+      label: params.solutionLabel,
+      classes: 'show-solution-button',
+      icon: 'reveal-answer',
+    });
+
+    const title = Object.assign(document.createElement('div'), {
+      classList: 'h5p-guess-answer-title',
+      innerHTML: params.taskDescription
+    });
+    const media = Object.assign(document.createElement('div'), { classList: 'media' });
+    const buttonContainer = Object.assign(document.createElement('div'), { classList: 'button-container' });
+    const nvdaText = Object.assign(document.createElement('span'), { classList: 'empty-text-for-nvda' });
+    const solutionText = Object.assign(document.createElement('div'), {
+      classList: 'solution-text hidden',
+      ariaLive: 'polite'
+    });
+
+    element.appendChild(title);
+    element.appendChild(media);
+    element.appendChild(buttonContainer);
+
+    buttonContainer.appendChild(solutionButton);
+    buttonContainer.appendChild(nvdaText);
+    buttonContainer.appendChild(solutionText);
 
     return element;
   };
