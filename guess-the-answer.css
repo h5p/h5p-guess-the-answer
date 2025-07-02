@@ -2,6 +2,7 @@
   background-color: var(--h5p-theme-ui-base);
   text-align: center;
   color: var(--h5p-theme-text-primary);
+  container-type: inline-size;
 }
 
 .h5p-guess-answer .h5p-image > img {
@@ -29,7 +30,9 @@
   display: inline-flex;
   container-type: inline-size;
   width: 100%;
-  max-width: 100%;
+  max-width: fill-available;
+  max-width: -webkit-fill-available;
+  max-width: -moz-available;
   justify-content: center;
 }
 
