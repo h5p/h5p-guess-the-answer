@@ -19,7 +19,6 @@
 }
 
 .h5p-guess-answer-title p {
-  display: inline-flex;
   font-size: var(--h5p-theme-font-size-xl);
   color: var(--h5p-theme-text-primary);
   font-weight: 600;
