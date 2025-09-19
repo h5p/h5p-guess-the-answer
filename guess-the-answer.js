@@ -134,7 +134,7 @@ H5P.GuessTheAnswer = (function () {
     const solutionButton = H5P.Components.Button({
       label: params.solutionLabel,
       classes: 'show-solution-button',
-      icon: 'reveal-answer',
+      icon: 'show-solutions',
     });
 
     const title = Object.assign(document.createElement('div'), {
