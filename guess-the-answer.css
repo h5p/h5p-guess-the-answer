@@ -39,7 +39,7 @@
   font-weight: bold;
 }
 
-.h5p-guess-answer .solution-text:focus {
+.h5p-guess-answer .solution-text:focus-visible {
   outline: none;
 }
 
