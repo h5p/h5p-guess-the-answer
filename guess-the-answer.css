@@ -18,6 +18,10 @@
   margin: 1em auto;
 }
 
+.h5p-guess-answer-title {
+  padding-inline: var(--h5p-theme-spacing-m);
+}
+
 .h5p-guess-answer-title p {
   font-size: var(--h5p-theme-font-size-xl);
   color: var(--h5p-theme-text-primary);
