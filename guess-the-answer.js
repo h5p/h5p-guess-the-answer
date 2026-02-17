@@ -66,9 +66,10 @@ H5P.GuessTheAnswer = (function () {
    * @param {object} params values
    * @param {object} values default values
    */
-  var setDefaults = function (params, values) {
+  function setDefaults(params, values) {
+    params = params || {};
     for (var prop in values) {
-      if (values.hasOwnProperty(prop)) {
+      if (Object.prototype.hasOwnProperty.call(values, prop)) {
         if (params[prop] === undefined) {
           params[prop] = values[prop];
         }
@@ -77,7 +78,8 @@ H5P.GuessTheAnswer = (function () {
         }
       }
     }
-  };
+    return params;
+  }
 
   /**
    * Initialize module.
@@ -86,39 +88,87 @@ H5P.GuessTheAnswer = (function () {
    * @alias H5P.GuessTheAnswer
    * @param {object} params
    * @param {number} contentId
+   * @param {object} contentData
    */
-  function C(params, contentId) {
-    const self = this;
+  function C(params, contentId, contentData) {
+    if (!(this instanceof H5P.GuessTheAnswer)) {
+      return new H5P.GuessTheAnswer(params, contentId, contentData);
+    }
+
+    H5P.Question.call(this, 'guess-the-answer');
+
+    var self = this;
+
+    contentData = contentData || {};
+    var prev = contentData.previousState || {};
+
     // Set default behavior.
-    setDefaults(params, {
+    params = setDefaults(params, {
       taskDescription: '',
       solutionLabel: 'Click to see the answer.',
-      solutionText: ''
+      solutionText: '',
+      media: {}
     });
 
-    // get element references
-    var rootElement = this.rootElement = this.createRootElement(params);
-    var mediaElement = rootElement.querySelector('.media');
-    var buttonElement = rootElement.querySelector('.show-solution-button');
-    var solutionElement = rootElement.querySelector('.solution-text');
+    this.params = params;
+    this.contentId = contentId;
 
-    // add media
-    if (params.media && Object.keys(params.media?.params).length > 0) {
+    this.answered = !!prev.answered;
+    this.showingSolution = !!prev.showingSolution;
+
+    // Build DOM
+    this.rootElement = this.createRootElement(params);
+
+    // Add media
+    var mediaElement = this.rootElement.querySelector('.media');
+    if (params.media && params.media.library) {
       var el = createMediaElement(params.media, contentId, this);
       initImage(el.querySelector('img'), this);
       mediaElement.appendChild(el);
     }
+    else if (params.media && params.media.params && Object.keys(params.media.params).length > 0) {
+      // Fallback
+      var el2 = createMediaElement(params.media, contentId, this);
+      initImage(el2.querySelector('img'), this);
+      mediaElement.appendChild(el2);
+    }
 
-    // add show solution text on button click
-    buttonElement.addEventListener('click', function() {
+    // Wire button
+    var buttonElement = this.rootElement.querySelector('.show-solution-button');
+    var solutionElement = this.rootElement.querySelector('.solution-text');
+
+    // Restore state
+    if (this.showingSolution || this.answered) {
+      this.answered = true;
+      this.showingSolution = true;
       buttonElement.classList.add('hidden');
       solutionElement.classList.remove('hidden');
-      setTimeout(() => {
-        solutionElement.innerHTML = params.solutionText;
-        self.trigger('resize');
-      }, 0)
+      solutionElement.innerHTML = params.solutionText;
+    }
+
+    buttonElement.addEventListener('click', function () {
+      buttonElement.classList.add('hidden');
+      solutionElement.classList.remove('hidden');
+      solutionElement.innerHTML = params.solutionText;
+
+      self.answered = true;
+      self.showingSolution = true;
+
+      // Update QS dots/progress
+      self.triggerXAPI('interacted');
+      var xAPIEvent = self.createXAPIEventTemplate('answered');
+      self.trigger(xAPIEvent);
+
+      self.trigger('resize');
     });
+
+    // Register DOM with H5P.Question wrapper
+    this.registerDomElements();
   }
+
+  // Proper inheritance
+  C.prototype = Object.create(H5P.Question.prototype);
+  C.prototype.constructor = C;
 
   /**
    * Creates the root element with the markup for the content type
@@ -130,23 +180,53 @@ H5P.GuessTheAnswer = (function () {
     var element = document.createElement('div');
 
     element.classList.add('h5p-guess-answer');
-    element.innerHTML = '<div class="h5p-guess-answer-title">' + params.taskDescription +'</div>' +
+    element.innerHTML =
+      '<div class="h5p-guess-answer-title">' + (params.taskDescription || '') + '</div>' +
       '<div class="media"></div>' +
-      '<button class="show-solution-button">' + params.solutionLabel + '</button>' +
+      '<button class="show-solution-button" type="button">' + (params.solutionLabel || '') + '</button>' +
       '<span class="empty-text-for-nvda">&nbsp;</span>' +
       '<div class="solution-text hidden" aria-live="polite"></div>';
 
     return element;
   };
 
-  /**
-   * Attach function called by H5P framework to insert H5P content into page.
-   *
-   * @param {jQuery} $container The container which will be appended to.
-   */
-  C.prototype.attach = function ($container) {
-    this.setActivityStarted();
-    $container.get(0).appendChild(this.rootElement);
+  C.prototype.registerDomElements = function () {
+    // Actual content
+    this.setContent(H5P.jQuery(this.rootElement));
+  };
+
+  // QS: indicates whether the user has given an answer
+  C.prototype.getAnswerGiven = function () {
+    return !!this.answered;
+  };
+
+  // QS scoring
+  C.prototype.getMaxScore = function () { return 0; };
+  C.prototype.getScore = function () { return 0; };
+
+  // QS: state save/restore
+  C.prototype.getCurrentState = function () {
+    return {
+      answered: this.answered,
+      showingSolution: this.showingSolution
+    };
+  };
+
+  // QS: reset
+  C.prototype.resetTask = function () {
+    this.answered = false;
+    this.showingSolution = false;
+
+    var buttonElement = this.rootElement.querySelector('.show-solution-button');
+    var solutionElement = this.rootElement.querySelector('.solution-text');
+
+    if (buttonElement) buttonElement.classList.remove('hidden');
+    if (solutionElement) {
+      solutionElement.classList.add('hidden');
+      solutionElement.innerHTML = '';
+    }
+
+    this.trigger('resize');
   };
 
   return C;
